@@ -5,9 +5,15 @@ namespace AddressBookSystem
 {
     class AddressBookSystem
     {
-        //Generated dictionary to store info
         Dictionary<String, String> Contactlist;
-        Dictionary<String, Dictionary<String, String>> AddressBook = new Dictionary<string, Dictionary<String, String>>();
+        Dictionary<String, Dictionary<String, String>> AddressBook;
+        Dictionary<String, Dictionary<String, Dictionary<String, String>>> AddressBookCollection = new Dictionary<string, Dictionary<String, Dictionary<String, String>>>();
+        String CurrentAddressBookName = "default";
+        public AddressBookSystem()
+        {
+            AddressBook = new Dictionary<string, Dictionary<String, String>>();
+            AddressBookCollection.Add(CurrentAddressBookName, AddressBook);
+        }
         private void AddContact()
         {
             //Adding contact 
@@ -130,6 +136,32 @@ namespace AddressBookSystem
             else
                 Console.WriteLine("contact doesn't exist");
         }
+        private void CreateAddressBook()
+        {
+            AddressBook = new Dictionary<string, Dictionary<String, String>>();
+            Console.WriteLine("Enter address book name:");
+            string AddressBookName = Console.ReadLine();
+            if (AddressBookCollection.ContainsKey(AddressBookName))
+                Console.WriteLine("Address book already exist");
+            else
+            {
+                AddressBookCollection.Add(AddressBookName, AddressBook);
+                CurrentAddressBookName = AddressBookName;
+                Console.WriteLine("Address book created");
+            }
+        }
+        private void ChangeAddressBook()
+        {
+            Console.WriteLine("Enter address book name:");
+            String AddressBookName = Console.ReadLine();
+            if (AddressBookCollection.ContainsKey(AddressBookName))
+            {
+                CurrentAddressBookName = AddressBookName;
+                Console.WriteLine("address book changed");
+            }
+            else
+                Console.WriteLine("address book doesn't exist");
+        }
         static void Main(string[] args)
         {
 
@@ -156,11 +188,17 @@ namespace AddressBookSystem
                         case 4:
                             addressBook.DeleteContact();
                             break;
+                        case 5:
+                            addressBook.CreateAddressBook();
+                            break;
+                        case 6:
+                            addressBook.ChangeAddressBook();
+                            break;
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Console.WriteLine("wrong input");
+                    Console.WriteLine("wrong input" + e);
                 }
             }
         }
